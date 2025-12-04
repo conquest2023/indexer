@@ -25,8 +25,7 @@ public class FeedEventListener {
     private final RetryHelper retryHelper;
     private final ObjectMapper mapper;
 
-    @RabbitListener(queues = "indexer.feed.q", concurrency = "3")
-    @RabbitListener(queues = "indexer.feed.q", containerFactory = "manualAckFactory")
+    @RabbitListener(queues = "indexer.feed.q", containerFactory = "manualAckFactory", concurrency = "3")
     public void onMessage(Map<String, Object> event, Message msg, Channel ch) throws Exception {
         long tag = msg.getMessageProperties().getDeliveryTag();
         try {
