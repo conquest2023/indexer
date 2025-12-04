@@ -14,7 +14,7 @@ import java.util.List;
 public class BulkBuffer {
     private final EsWriter esWriter;
 
-    private final int flushSize = 3;
+    private final int flushSize = 5;
     private final long flushMillis = 1000;
 
     private final List<FeedEvent> queue = new ArrayList<>();
@@ -22,20 +22,22 @@ public class BulkBuffer {
 
     public synchronized void add(FeedEvent evt) {
         queue.add(evt);
-        log.info("🟦 buffer size={}", queue.size());
-        if (queue.size() >= flushSize) flush();
+        log.info("buffer size={}", queue.size());
+        if (queue.size() >= flushSize)
+            flush();
     }
     public synchronized boolean shouldFlush() {
         return queue.size() >= flushSize || (System.currentTimeMillis() - lastFlushAt) >= flushMillis;
     }
 
     public synchronized void flush() {
-        if (queue.isEmpty()) return;
+        if (queue.isEmpty())
+            return;
         var batch = new ArrayList<>(queue);
         queue.clear();
-        log.info("🟩 bulk flush start size={}", batch.size());
+        log.info("🟩bulk flush start size={}", batch.size());
         esWriter.bulkWrite(batch);
         lastFlushAt = System.currentTimeMillis();
-        log.info("🟩 bulk flush done");
+        log.info("🟩bulk flush done");
     }
 }

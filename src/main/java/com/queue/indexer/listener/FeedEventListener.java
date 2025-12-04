@@ -30,15 +30,13 @@ public class FeedEventListener {
     public void onMessage(Map<String, Object> event, Message msg, Channel ch) throws Exception {
         long tag = msg.getMessageProperties().getDeliveryTag();
         try {
-            log.info("🟨 eventType={}, retry={}",
+            log.info(" eventType={}, retry={}",
                     event.get("type"),
                     msg.getMessageProperties().getHeaders().get("x-retry"));
 
-            // 필요 시 DTO로 변환
             FeedEvent evt = mapper.convertValue(event, FeedEvent.class);
-
             buffer.add(evt);
-            buffer.flush(); // 로컬 확인용(임시). 확인되면 제거
+            buffer.flush();
             ch.basicAck(tag, false);
 
         } catch (RetryableEsException e) {

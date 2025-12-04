@@ -15,7 +15,7 @@ public class RabbitHandlerMethodConfig implements RabbitListenerConfigurer {
     @Bean
     public DefaultMessageHandlerMethodFactory rabbitMessageHandlerMethodFactory() {
         DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
-        factory.setMessageConverter(new MappingJackson2MessageConverter()); // ★ 메서드 인자용 컨버터
+        factory.setMessageConverter(new MappingJackson2MessageConverter());
         return factory;
     }
 
