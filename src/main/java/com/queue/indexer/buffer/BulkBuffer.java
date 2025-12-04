@@ -23,8 +23,9 @@ public class BulkBuffer {
     public synchronized void add(FeedEvent evt) {
         queue.add(evt);
         log.info("buffer size={}", queue.size());
-        if (queue.size() >= flushSize)
+        if (queue.size() >= flushSize) {
             flush();
+        }
     }
     public synchronized boolean shouldFlush() {
         return queue.size() >= flushSize || (System.currentTimeMillis() - lastFlushAt) >= flushMillis;

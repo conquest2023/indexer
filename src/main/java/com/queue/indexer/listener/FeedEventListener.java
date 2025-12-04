@@ -33,10 +33,8 @@ public class FeedEventListener {
             log.info(" eventType={}, retry={}",
                     event.get("type"),
                     msg.getMessageProperties().getHeaders().get("x-retry"));
-
             FeedEvent evt = mapper.convertValue(event, FeedEvent.class);
             buffer.add(evt);
-            buffer.flush();
             ch.basicAck(tag, false);
 
         } catch (RetryableEsException e) {
